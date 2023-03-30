@@ -23,8 +23,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3308/security?serverTimezone=Asia/Seoul
-    username: root
-    password: 5206
+    username: id
+    password: password
     
   jpa:
     hibernate:
@@ -56,10 +56,10 @@ spring:
     ```
 
 + User & UserDetails & UserDetialsService
-    + 시큐리티 설정에서 loginProcessingUrl("/login")의해 요청이 오면 UserDetailsService가 실행이 된다.
-    + UsedDetailsSevice는 내부에 loadUserByUsername 함수를 실행하고, UserDetails를 반환 한다.
-    + UserDetails는 내부에 User정보를 가지고 있다.
-    + 반환한 유저 정보는 SecurityContextHolder에 내부에 저장된다
+	+ 시큐리티 설정에서 loginProcessingUrl("/login")의해 요청이 오면 UserDetailsService가 실행이 된다.
+	+ UsedDetailsSevice는 내부에 loadUserByUsername 함수를 실행하고, UserDetails를 반환 한다.
+	+ UserDetails는 내부에 User정보를 가지고 있다.
+	+ 반환한 유저 정보는 SecurityContextHolder에 내부에 저장된다
     
 
 
