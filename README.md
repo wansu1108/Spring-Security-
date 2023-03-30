@@ -1,6 +1,6 @@
 # SpringBoot-Security
-1. [SpringBoot - Basic - V1](#1.V1-스프링-시큐리티-기본)
-2. [SpringBoot - Oauth - V2](#2.V2)
+1. [SpringBoot - Basic - V1](#1.-V1-스프링-시큐리티-기본)
+2. [SpringBoot - Oauth - V2](#2.-V2-스프링-시큐리티-Oauth2)
 
 # 1. V1 스프링 시큐리티 기본
 + gradle
@@ -56,10 +56,43 @@ spring:
     ```
 
 + User & UserDetails & UserDetialsService
-	+ 시큐리티 설정에서 loginProcessingUrl("/login")의해 요청이 오면 UserDetailsService가 실행이 된다.
-	+ UsedDetailsSevice는 내부에 loadUserByUsername 함수를 실행하고, UserDetails를 반환 한다.
-	+ UserDetails는 내부에 User정보를 가지고 있다.
-	+ 반환한 유저 정보는 SecurityContextHolder에 내부에 저장된다
+    + 시큐리티 설정에서 loginProcessingUrl("/login")의해 요청이 오면 UserDetailsService가 실행이 된다.
+    + UsedDetailsSevice는 내부에 loadUserByUsername 함수를 실행하고, UserDetails를 반환 한다.
+    + UserDetails는 내부에 User정보를 가지고 있다.
+    + 반환한 유저 정보는 SecurityContextHolder에 내부에 저장된다
     
 
+
+# 2. V2 스프링 시큐리티 Oauth2
+
++ VIEW
+    + Oauth2 요청 주소는 정해져있다. /oauth2/authorization/provider_name
+    + <a href="/oauth2/authorization/google">Google 로그인</a>
+	+ <a href="/oauth2/authorization/naver">Naver 로그인</a>
+
++ DefaultOauth2UserService
+로그인이 완료되면 유저 정보를 전달받는 콜백함수 이다.
+
+    ```java
+        @Service
+        public class PrincipalAuth2UserService extends DefaultOAuth2UserService{
+            // 구글로 부터 받은 userRequest 데이터에 대한 후처리 함수 
+            @Override
+            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+                OAuth2User oAuth2User = super.loadUser(userRequest);
+                System.out.println(userRequest.getClientRegistration()); // provider , ex)kakao , google, naver
+                System.out.println(userRequest.getAccessToken()); // 엑세스 토큰 정보
+                System.out.println(oAuth2User.getAttributes()); // 사용자 프로필 정보
+                return super.loadUser(userRequest);
+            }
+        }
+    ```
+
++ OAuth2User vs UserDetails
+    + `일반 로그인:`시큐리티 세션(Authentication(UserDetails))
+    + `SNS 로그인:`시큐리티 세션(Authentication(OAuth2User))
+    + 해결방안은 `PrincipalDetails`에 `UserDetails` , `OAuth2User` 두가지 타입을 전부 구현하면 된다.
+    ```java
+        public class PrincipalDetails implements UserDetails , OAuth2User{}
+    ```
 
