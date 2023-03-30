@@ -1,6 +1,6 @@
 # SpringBoot-Security
-1. [SpringBoot - Basic - V1](#1.-V1-스프링-시큐리티-기본)
-2. [SpringBoot - Oauth - V2](#2.-V2-스프링-시큐리티-Oauth2)
+https://github.com/codingspecialist
+인프런 강의를 토대로 공부한것을 정리한 내용입니다.
 
 # 1. V1 스프링 시큐리티 기본
 + gradle
@@ -66,26 +66,28 @@ spring:
 # 2. V2 스프링 시큐리티 Oauth2
 
 + VIEW
-    + Oauth2 요청 주소는 정해져있다. /oauth2/authorization/provider_name
-    + <a href="/oauth2/authorization/google">Google 로그인</a>
-	+ <a href="/oauth2/authorization/naver">Naver 로그인</a>
+    + Oauth2 요청 주소는 정해져 있다. /oauth2/authorization/provider_name
+	``` html
+	<a href="/oauth2/authorization/google">Google 로그인</a>
+	<a href="/oauth2/authorization/naver">Naver 로그인</a>
+	```
 
 + DefaultOauth2UserService
 로그인이 완료되면 유저 정보를 전달받는 콜백함수 이다.
 
     ```java
-        @Service
-        public class PrincipalAuth2UserService extends DefaultOAuth2UserService{
-            // 구글로 부터 받은 userRequest 데이터에 대한 후처리 함수 
-            @Override
-            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-                OAuth2User oAuth2User = super.loadUser(userRequest);
-                System.out.println(userRequest.getClientRegistration()); // provider , ex)kakao , google, naver
-                System.out.println(userRequest.getAccessToken()); // 엑세스 토큰 정보
-                System.out.println(oAuth2User.getAttributes()); // 사용자 프로필 정보
-                return super.loadUser(userRequest);
-            }
+    @Service
+    public class PrincipalAuth2UserService extends DefaultOAuth2UserService{
+    // 구글로 부터 받은 userRequest 데이터에 대한 후처리 함수 
+	@Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+           OAuth2User oAuth2User = super.loadUser(userRequest);
+           System.out.println(userRequest.getClientRegistration()); // provider , ex)kakao , google, naver
+           System.out.println(userRequest.getAccessToken()); // 엑세스 토큰 정보
+           System.out.println(oAuth2User.getAttributes()); // 사용자 프로필 정보
+           return super.loadUser(userRequest);
         }
+    }
     ```
 
 + OAuth2User vs UserDetails
